@@ -96,7 +96,46 @@ diagnoses = {
                      'Ortho emgcy - open fractures',  # 6
                      'Osteoporosis',  # 7
                      'Other diagnosis'  # 8
-                     ]
+                     ],
+    'Ob': ['Abnormal labor',  # 0
+           'Domestic violence',
+           'Fetal heart rate abnormal',  # 2
+           'Intrapartum fetal assessment',
+           'Normal labor',  # 4
+           'Obstetrical complications including',
+           'Diabetes in pregnancy',  # 6
+           'Hypertensive disorders',
+           'Infection',  # 8
+           'Multi-fetal pregnancy',
+           'Obstetrical hemorrhage',  # 10
+           'Post term pregnancy',
+           'Preterm labor',  # 12
+           'Postpartum care',
+           'Preconception care',  # 14
+           'Prenatal care',
+           'Routine Antepartum Care',  # 16
+           'Other diagnosis'
+           ],
+    'Gyn': ['Abnormal uterine bleeding',
+            'Acute Vaginitis and STIs',
+            'Adolescent gynecology',
+            'Benign pelvic and adnexal masses',
+            'Contraception provision and counseling',
+            'Domestic violence',
+            'Endometriosis',
+            'Gynecological cancer',
+            'Human Sexuality',
+            'Infertility',
+            'Management of abnormal pap smear',
+            'Menopause/Osteoporosis',
+            'Molar Pregnancy',
+            'Pain - pelvic/abdomen',
+            'Pelvic pain',
+            'Pregnancy Termination',
+            'Puberty',
+            'Routine preventative gynecologic exam',
+            'Urinary Incontinence',
+            'Other diagnosis']
 }
 
 procedures = {'Emergency Medicine': ['Basic BLS',
@@ -122,7 +161,30 @@ procedures = {'Emergency Medicine': ['Basic BLS',
                                'Starting an IV',
                                'Suturing',
                                'Other Procedure'
-                               ]
+                               ],
+              'Gyn': ['Basic BLS',
+                      'Bimanual pelvic palpation',
+                      'Drawing venous blood',
+                      'Foley catheter placement',
+                      'Obtaining pap smear',
+                      'Speculum examination',
+                      'Starting an IV',
+                      'STI and vaginitis evaluation',
+                      'Suturing',
+                      'Vaginal and cervical culture acquisition',
+                      'Well women exam - breast exam and pelvic exam',
+                      'Other Gyn Procedure'
+                      ],
+              'Ob': ['Assessment of fetal lie presentation', # 0
+                     'Basic BLS',
+                     'Cervical exam in labor', # 2
+                     'Delivery of placenta',
+                     'Drawing venous blood', # 4
+                     'Starting an IV',
+                     'Station (if cervical exam done)', # 6
+                     'Suturing',
+                     'Vaginal delivery', # 8
+                     'Other OB Procedure']
               }
 
 skills = {'Emergency Medicine': ['Observed surgery',  # 0
@@ -188,5 +250,19 @@ skills = {'Emergency Medicine': ['Observed surgery',  # 0
                            'Performed a patient hand-off',
                            'Obtained informed consent',  # 13
                            'None'  # 14
-                           ]
+                           ],
+          'Ob': ['Performed history',
+                 'Performed Clinical Exam',
+                 'Developed differential diagnosis',
+                 'Wrote patient note',
+                 'Performed oral patient presentation',
+                 'Incorporated literature into clinical decision-making',
+                 'Wrote orders',
+                 'Provided education to patient and/or family',
+                 'Interacted on patient care with at least one member of the inter-professional team (RN, case manager, physical therapist, pharmacist, social worker, nutritionist)',
+                 'Participated in a family meeting',
+                 'Performed a patient hand-off',
+                 'Obtained informed consent',
+                 'None'
+                 ]
           }
