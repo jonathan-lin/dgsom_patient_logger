@@ -5,11 +5,74 @@ from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 import time
 import re
+import xlrd
+import datetime
 
 def open_browser():
     browser = webdriver.Firefox(executable_path=r'C:\geckodriver\geckodriver.exe')
     browser.get("https://gryphon.medsch.ucla.edu")
     return browser
+
+
+def get_pt_data(loc, sheet_name):
+    wb = xlrd.open_workbook(loc)
+    sheet = wb.sheet_by_name(sheet_name)
+    row_count = len(sheet._cell_values)
+    column_count = len(sheet._cell_values[0])-2
+    counter = 0
+    setting = []
+    diagnoses = []
+    procedures = []
+    clinicalskills = []
+    while counter < row_count:
+        if sheet.cell_value(counter,0) == 'Setting':
+            setting.append(counter)
+        if sheet.cell_value(counter,0) == 'Diagnoses':
+            setting.append(counter-1)
+            diagnoses.append(counter)
+        if sheet.cell_value(counter,0) == 'Procedures':
+            diagnoses.append(counter-1)
+            procedures.append(counter)
+        if sheet.cell_value(counter,0) == 'Clinical Skills':
+            procedures.append(counter-1)
+            clinicalskills.append(counter)
+            clinicalskills.append(row_count-1)
+        counter = counter + 1
+    pt_list = []
+    for i in range(column_count):
+        pt = {}
+        pt['specialty'] = sheet.cell_value(0,i+2)
+        pt['date'] = str(datetime.datetime(*xlrd.xldate_as_tuple(sheet.cell_value(1,i+2), wb.datemode))).split()[0]
+        for j in range(3):
+            if sheet.cell_value(j+2,i+2) != '':
+                pt['responsibility'] = sheet.cell_value(j+2,1)
+
+        pt['age'] = sheet.cell_value(5,i+2)
+        pt['specialty'] = sheet.cell_value(0, i + 2)
+        for j in range(setting[0],setting[1]+1):
+            if sheet.cell_value(j,i+2) != '':
+                pt['setting'] = sheet.cell_value(j,1)
+
+        diagnosis_list = []
+        for j in range(diagnoses[0],diagnoses[1]+1):
+            if sheet.cell_value(j,i+2) != '':
+                diagnosis_list.append(sheet.cell_value(j,1))
+        pt['diagnoses'] = diagnosis_list
+
+        procedures_list = []
+        for j in range(procedures[0],procedures[1]+1):
+            if sheet.cell_value(j,i+2) != '':
+                procedures_list.append(sheet.cell_value(j,1))
+        pt['procedures'] = procedures_list
+
+        clinicalskills_list = []
+        for j in range(clinicalskills[0],clinicalskills[1]+1):
+            if sheet.cell_value(j,i+2) != '':
+                clinicalskills_list.append(sheet.cell_value(j,1))
+        pt['clinicalskills'] = clinicalskills_list
+        pt_list.append(pt)
+    del wb
+    return pt_list
 
 
 def wait_for_load(browser, duration):
@@ -37,6 +100,8 @@ def set_date(form, date):
     date_field = form.find_element_by_id('encounter_date')
     for i in range(10):
         date_field.send_keys(Keys.BACK_SPACE)
+        time.sleep(.1)
+    time.sleep(1)
     date_field.send_keys(date)
     time.sleep(1)
     date_field.send_keys(Keys.ESCAPE)
