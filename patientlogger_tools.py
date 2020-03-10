@@ -6,7 +6,9 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import re
 import xlrd
+from xlutils.copy import copy
 import datetime
+
 
 def open_browser():
     browser = webdriver.Firefox(executable_path=r'C:\geckodriver\geckodriver.exe')
@@ -40,6 +42,9 @@ def get_pt_data(loc, sheet_name):
         counter = counter + 1
     pt_list = []
     for i in range(column_count):
+        if sheet.cell_value(row_count-1,i+2) == 1:
+            print('Patient already logged')
+            continue
         pt = {}
         pt['specialty'] = sheet.cell_value(0,i+2)
         pt['date'] = str(datetime.datetime(*xlrd.xldate_as_tuple(sheet.cell_value(1,i+2), wb.datemode))).split()[0]
@@ -70,9 +75,26 @@ def get_pt_data(loc, sheet_name):
             if sheet.cell_value(j,i+2) != '':
                 clinicalskills_list.append(sheet.cell_value(j,1))
         pt['clinicalskills'] = clinicalskills_list
+
+        pt['complete_loc'] = (row_count,i+2)
+
         pt_list.append(pt)
     del wb
     return pt_list
+
+
+# def mark_pt_logged(loc, sheet_name, pt):
+#     book = xlrd.open_workbook(loc)
+#     sheet_names = book.sheet_names()
+#     index = 0
+#     for i in range(len(sheet_names)):
+#         if sheet_name == i:
+#             index = i
+#     wb = copy(book)
+#     sheet = wb.get_sheet(index)
+#     complete_loc = pt['complete_loc']
+#     sheet.write(complete_loc[0], complete_loc[1], 1)
+#     wb.save(loc)
 
 
 def wait_for_load(browser, duration):
@@ -207,7 +229,7 @@ def add_another(form):
     specialty.select_by_visible_text('Add another entry')
 
 
-def submit(form):
-    submit_button = form.find_element_by_css_selector("input.pull-right")
+def submit(browser):
+    submit_button = browser.find_element_by_css_selector("input.pull-right")
     submit_button.click()
-    WebDriverWait(form, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, "input.pull-right")))
+    WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.CSS_SELECTOR, "input.pull-right")))
